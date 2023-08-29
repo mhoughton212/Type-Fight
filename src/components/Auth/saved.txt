@@ -1,0 +1,6 @@
+<Route
+exact
+path = "/"
+render = {(props) => {
+  return <HomePage {...props} email={email} username={username} />;
+}}
