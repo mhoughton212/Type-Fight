@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import Avatar from '@mui/material/Avatar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Link from '@mui/material/Link';
@@ -10,6 +10,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Collapse from '@mui/material/Collapse';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from "react-router-dom";
+import {SocketContext} from '../socket';
 
 
 function Copyright(props) {
@@ -29,10 +30,12 @@ const defaultTheme = createTheme();
 
 export default function Signout() {
   const [error, setError] = useState("");
+  const socket = useContext(SocketContext);
   let navigate = useNavigate();
 
   useEffect(() => {
     window.localStorage.removeItem('token');
+    socket.emit('leave');
     navigate('/login')
   }, []);
 

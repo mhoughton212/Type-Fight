@@ -13,11 +13,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import PersonIcon from '@mui/icons-material/Person';
-import { IconButton } from '@mui/material';
-import { ClassNames } from '@emotion/react';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PopupState, { bindTrigger, bindMenu } from 'material-ui-popup-state';
+import Room from './main-ui/Room.js'
+import {SocketContext, socket} from './socket.js';
 
 function App() {
   const [token, setToken] = useState("");
@@ -90,12 +90,16 @@ function App() {
           path="/confirm-email/:token"
           element={<ConfirmEmail setToken={setToken} />}
         />
+        <Route 
+          path="/room/:roomCode"
+          element={<Room />}
+        />
       </Routes>
     );
   }
 
   return (
-    <div>
+    <SocketContext.Provider value={socket}>
       <BrowserRouter>
       <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -120,9 +124,21 @@ function App() {
                   {username}
                 </Button>
                 <Menu {...bindMenu(popupState)}>
-                  <MenuItem onClick={popupState.close}>Profile</MenuItem>
-                  <MenuItem onClick={popupState.close}>My account</MenuItem>
-                  <MenuItem onClick={popupState.close}>Logout</MenuItem>
+                  <MenuItem>
+                    <Link href="/profile" onClick={popupState.close}>
+                      Profile
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href="/account" onClick={popupState.close}>
+                      My Account
+                    </Link>
+                  </MenuItem>
+                  <MenuItem>
+                    <Link href="/signout" onClick={popupState.close}>
+                      Signout
+                    </Link>
+                  </MenuItem>
                 </Menu>
               </React.Fragment>
             )}
@@ -139,7 +155,7 @@ function App() {
     </Box>
       {renderRouter()}
       </BrowserRouter>
-    </div>
+      </SocketContext.Provider>
   );
 }
 
